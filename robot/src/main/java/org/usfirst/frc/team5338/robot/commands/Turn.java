@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Turn extends Command
 {
 	double angle, initalHeading, targetHeading;
+	double P, I, D;
 	
 	public Turn(final double input)
 	{
@@ -18,6 +19,9 @@ public class Turn extends Command
 		this.initalHeading = Robot.sensors.ahrs.getYaw();
 		this.targetHeading = this.initalHeading + this.angle;
 		this.setTimeout((2 * Math.abs(this.angle)) / 90.0);
+	}
+	public void PID() {
+		
 	}
 	@Override
 	protected void initialize()
