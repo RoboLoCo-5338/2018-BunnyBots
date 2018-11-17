@@ -1,5 +1,5 @@
 # 2018-Code-Base
-Our complete code for the 2018 IROC Competition, Team 5338. This code has not been validated yet.
+Our complete code for the 2018 BunnyBots Competition, Team 5338. This code has not been validated yet.
 
 ## Installation
 Welcome new RoboLoCo programmer! To begin the installation process, first verify that on your Windows/macOS/Linux system you have the latest version of **JAVA 8** installed on your system. These following steps will **fail** if you do not have that exact version installed.
