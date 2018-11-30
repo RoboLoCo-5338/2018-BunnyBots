@@ -10,27 +10,27 @@ public class OI
 	// Enum that represents all possible buttons in use.
 	public enum Button // Shoot
 	{
-		SHIFT_UP, SHIFT_DOWN, INTAKE, OUTTAKE, CLOSE, OPEN, EXTEND, RETRACT, FLOOR, SWITCH, SCALE, SPIN_UP, SHOOT
+		STRAIGHT, SHIFT_DOWN, INTAKE, OUTTAKE, CLOSE, OPEN, EXTEND, RETRACT, FLOOR, SWITCH, SCALE, SPIN_UP, SHOOT, SENS
 	}
 	
 	// Private method that returns a deadzone-adjusted value for a joystick value
 	// input.
 	private static double joystickDeadZone(final double value)
 	{
-		if(value > 0.075)
-		{
-			return (value - 0.075) / 0.925;
-		}
-		else if(value < -0.075)
-		{
-			return (value + 0.075) / 0.925;
-		}
+		// if(value > 0.075)
+		// {
+		// 	return (value - 0.075) / 0.925;
+		// }
+		// else if(value < -0.075)
+		// {
+		// 	return (value + 0.075) / 0.925;
+		// }
 		return value;
 	}
 	
 	// Creates private joysticks objects for use.
-	private final Joystick leftJoystick = new Joystick(0);
-	private final Joystick rightJoystick = new Joystick(1);
+	private final Joystick leftController = new Joystick(0);
+	private final Joystick rightController = new Joystick(1);
 	
 	// Public method that returns the state of a particular button based on the
 	// Button enum.
@@ -40,31 +40,33 @@ public class OI
 		switch(button)
 		{
 			case CLOSE:
-				return this.rightJoystick.getRawButton(1);
+				return this.leftController.getRawButton(9) || this.leftController.getRawButton(1);
 			case OPEN:
-				return this.rightJoystick.getRawButton(2);
+				return this.leftController.getRawButton(1);
 			case INTAKE:
-				return this.rightJoystick.getRawButton(4);
+				return this.leftController.getRawButton(5);
 			case OUTTAKE:
-				return this.rightJoystick.getRawButton(6);
+				return this.leftController.getRawButton(6);
 			case SPIN_UP:
-				return this.rightJoystick.getRawButton(5);
+				return this.leftController.getRawAxis(2) > 0.1 ? true : false;
 			case SHOOT:
-				return this.rightJoystick.getRawButton(3);
+				return this.leftController.getRawAxis(3) > 0.1 ? true : false;
 			case EXTEND:
-				return this.rightJoystick.getRawButton(9);
+				return this.rightController.getRawButton(9);
 			case RETRACT:
-				return this.rightJoystick.getRawButton(10);
-			case SHIFT_UP:
-				return this.rightJoystick.getRawButton(11);
+				return this.rightController.getRawButton(10);
+			case STRAIGHT:
+				return this.leftController.getRawButton(2);
 			case SHIFT_DOWN:
-				return this.rightJoystick.getRawButton(12);
+				return this.rightController.getRawButton(8);
 			case FLOOR:
-				return this.leftJoystick.getRawButton(2);
+				return this.leftController.getPOV(0) == 180 ? true : false;
 			case SWITCH:
-				return this.leftJoystick.getRawButton(3);
+				return this.leftController.getPOV(0) == 90 || this.leftController.getPOV(0) == 270 ? true : false;
 			case SCALE:
-				return this.leftJoystick.getRawButton(5);
+				return this.leftController.getPOV(0) == 0 ? true : false;
+			case SENS:
+				return this.leftController.getRawButtonReleased(10);
 			default:
 				return false;
 		}
@@ -75,11 +77,11 @@ public class OI
 		switch(input)
 		{
 			case 'X': // Gets deadzone corrected x-axis position
-				return OI.joystickDeadZone(this.leftJoystick.getRawAxis(0));
+				return OI.joystickDeadZone(this.leftController.getRawAxis(0));
 			case 'Y': // Gets deadzone corrected y-axis position
-				return -OI.joystickDeadZone(this.leftJoystick.getRawAxis(1));
+				return -OI.joystickDeadZone(this.leftController.getRawAxis(1));
 			case 'Z': // Gets deadzone corrected z-axis (rotation) position
-				return OI.joystickDeadZone(this.leftJoystick.getRawAxis(2));
+				return 0.0;
 			default: // Returns 0.0 is argument is unknown
 				return 0.0;
 		}
@@ -90,11 +92,11 @@ public class OI
 		switch(input)
 		{
 			case 'X': // Gets deadzone corrected x-axis position
-				return OI.joystickDeadZone(this.rightJoystick.getRawAxis(0));
+				return OI.joystickDeadZone(this.leftController.getRawAxis(4));
 			case 'Y': // Gets deadzone corrected y-axis position
-				return -OI.joystickDeadZone(this.rightJoystick.getRawAxis(1));
+				return -OI.joystickDeadZone(this.leftController.getRawAxis(5));
 			case 'Z': // Gets deadzone corrected z-axis (rotation) position
-				return OI.joystickDeadZone(this.rightJoystick.getRawAxis(2));
+				return 0.0;
 			default: // Returns 0.0 is argument is unknown
 				return 0.0;
 		}
