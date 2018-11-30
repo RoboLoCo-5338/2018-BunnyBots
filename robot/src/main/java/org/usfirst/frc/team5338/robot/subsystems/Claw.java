@@ -23,6 +23,7 @@ public class Claw extends Subsystem
 	private final double FLOOR_VALUE = 690; // potentiometer value when dart actuator is extended
 	private final double SWITCH_VALUE = 290;
 	private boolean clawClosed = true;
+	private boolean clawTemp;
 	private boolean shooterPosition = false;
 	private int dartPosition = 3;
 	private final double MIN_DART_SPEED = 0.10; // speed to which actuator slows
@@ -209,15 +210,32 @@ public class Claw extends Subsystem
 	}
 	public void control(final OI oi)
 	{
-		if(oi.get(OI.Button.CLOSE))
+		/*if(oi.get(OI.Button.CLOSE)) {
+			SmartDashboard.putBoolean("CLOSE", true);
+		}	else
+			SmartDashboard.putBoolean("CLOSE", false);		
+		*/
+		/*if(oi.get(OI.Button.CLOSE)) {
+			clawTemp = this.clawClosed;
+			this.clawClosed = !clawTemp;
+		}
+		*/
+		if (oi.get(OI.Button.CLOSE) && !clawTemp) {
+			clawClosed = !clawClosed;
+			clawTemp = true;
+		}
+		if (!oi.get(OI.Button.CLOSE) && clawTemp) {
+			clawTemp = false;
+		}
+		if(!clawClosed)
 		{
 			this.GRABBER.set(DoubleSolenoid.Value.kReverse);
-			this.clawClosed = true;
+			SmartDashboard.putBoolean("CLOSE", true);			
 		}
-		else if(oi.get(OI.Button.OPEN))
+		else if(clawClosed)
 		{
 			this.GRABBER.set(DoubleSolenoid.Value.kForward);
-			this.clawClosed = false;
+			SmartDashboard.putBoolean("CLOSE", false);			
 		}
 		else
 		{

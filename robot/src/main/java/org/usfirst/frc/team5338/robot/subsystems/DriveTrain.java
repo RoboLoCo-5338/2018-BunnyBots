@@ -34,7 +34,9 @@ public class DriveTrain extends Subsystem
 	// Objects that control the shift and compressor mechanism
 	private final Compressor COMPRESSOR = new Compressor(8);
 	private final DoubleSolenoid SHIFTER = new DoubleSolenoid(8, 1, 2);
-	private boolean shiftedUp;
+	private boolean straight;
+	private boolean sensChange = false;
+	private double speed = 3.0/5.5;;
 	
 	// Use constructor for any pre-start initialization
 	public DriveTrain()
@@ -43,7 +45,7 @@ public class DriveTrain extends Subsystem
 		this.COMPRESSOR.setClosedLoopControl(true);
 		this.COMPRESSOR.start();
 		this.SHIFTER.set(DoubleSolenoid.Value.kForward);
-		this.shiftedUp = false;
+		this.straight = false;
 		for(final WPI_TalonSRX talon : new WPI_TalonSRX[] {this.LEFT_1, this.LEFT_2, this.RIGHT_1, this.RIGHT_2})
 		{
 			DriveTrain.configureTalon(talon);
@@ -65,12 +67,12 @@ public class DriveTrain extends Subsystem
 		if(state)
 		{
 			this.SHIFTER.set(DoubleSolenoid.Value.kReverse);
-			this.shiftedUp = true;
+			this.straight = true;
 		}
 		else
 		{
 			this.SHIFTER.set(DoubleSolenoid.Value.kForward);
-			this.shiftedUp = false;
+			this.straight = false;
 		}
 	}
 	public SensorCollection[] getEncoders()
@@ -85,20 +87,37 @@ public class DriveTrain extends Subsystem
 	// Actual drive method called in Robot class
 	public void drive(final OI oi)
 	{
-		if(this.shiftedUp)
+		
+		if(oi.get(OI.Button.STRAIGHT))
 		{
-			this.DRIVE.tankDrive((oi.getLeftJoystick('Y') * 3) / 5, (oi.getRightJoystick('Y') * 3) / 5, false);
+			
+			this.DRIVE.tankDrive((oi.getLeftJoystick('Y') * speed), (oi.getLeftJoystick('Y') * speed), false);
 		}
 		else
 		{
-			this.DRIVE.tankDrive((oi.getLeftJoystick('Y') * 3) / 4, (oi.getRightJoystick('Y') * 3) / 4, false);
+			this.DRIVE.tankDrive((oi.getLeftJoystick('Y') * speed), (oi.getRightJoystick('Y') * speed), false);
 		}
+
+		if(oi.get(OI.Button.SENS)) { 
+			this.sensChange = !this.sensChange;
+		}
+
+		if(sensChange) {
+			speed = 0.3;
+		} else {
+			speed = 3.0/5.5;
+		}
+
+		SmartDashboard.putBoolean("sens", !sensChange);
+
+
+
 		// if(Robot.oi.get(OI.Button.SHIFT_UP))
 		// {
 		// // If the user has allowed the gear to shift up, then change the solenoid to
 		// // allow for faster movement
 		// this.SHIFTER.set(DoubleSolenoid.Value.kReverse);
-		// this.shiftedUp = true;
+		// this.straight = true;
 		// }
 		// else if(Robot.oi.get(OI.Button.SHIFT_DOWN))
 		// {
@@ -107,14 +126,14 @@ public class DriveTrain extends Subsystem
 		// (Math.abs(this.RIGHT_SIDE.get()) <= 0.25))
 		// {
 		// this.SHIFTER.set(DoubleSolenoid.Value.kForward);
-		// this.shiftedUp = false;
+		// this.straight = false;
 		// }
 		// }
 		/**
 		 * IMPORTANT: Due to motor mirroring Forward: Left = +, Right = - Backward: Left
 		 * = -, Right = +
 		 */
-		SmartDashboard.putBoolean("Shift Status", this.shiftedUp);
+		SmartDashboard.putBoolean("Shift Status", this.straight);
 		SmartDashboard.putData("Drivetrain Status", this.DRIVE);
 	}
 	// Default drive command will be a general tank drive instead of arcade drive
