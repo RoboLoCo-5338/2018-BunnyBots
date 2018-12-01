@@ -103,7 +103,7 @@ public class DriveTrain extends Subsystem
 		}
 
 		if(sensChange) {
-			speed = 0.3;
+			speed = 0.25;
 		} else {
 			speed = 3.0/5.5;
 		}

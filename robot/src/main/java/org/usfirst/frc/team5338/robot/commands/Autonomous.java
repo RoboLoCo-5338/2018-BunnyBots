@@ -22,8 +22,9 @@ public class Autonomous extends CommandGroup
 			this.addSequential(new ChangeGear(false));
 			switch(this.autonomous)
 			{
-				// case "TESTING": // THIS IS TEMPORARY ONLY, PLEASE REMOVE ME!!
-				// break;
+				case "TESTING": // THIS IS TEMPORARY ONLY, PLEASE REMOVE ME!!
+					this.addSequential(new Turn(90.0));
+					break;
 				case "NOTHING":
 					break;
 				case "CENTER":
