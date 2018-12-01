@@ -66,7 +66,7 @@ public class OI
 			case SCALE:
 				return this.leftController.getPOV(0) == 0 ? true : false;
 			case SENS:
-				return this.leftController.getRawButtonReleased(10);
+				return this.rightController.getRawButtonReleased(10);
 			default:
 				return false;
 		}
