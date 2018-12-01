@@ -14,14 +14,7 @@ public class Straight extends Command
 		super();
 		this.requires(Robot.drivetrain);
 		this.requires(Robot.sensors);
-		if(input < 0)
-		{
-			this.correctionFactor = -13;
-		}
-		else
-		{
-			this.correctionFactor = 13;
-		}
+
 		this.rotations = (input + this.correctionFactor) / (6.0 * Math.PI);
 		this.setTimeout((6.0 * Math.abs(input)) / 138.0);
 	}
