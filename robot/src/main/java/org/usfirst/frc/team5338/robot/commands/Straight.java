@@ -34,6 +34,7 @@ public class Straight extends Command
 			this.targetRotationsLeft -= Math.abs(distanceTravelled[0]);
 			this.targetRotationsRight -= Math.abs(distanceTravelled[1]);
 			Robot.drivetrain.drive(0.50, 0.50);
+			
 		}
 		else
 		{

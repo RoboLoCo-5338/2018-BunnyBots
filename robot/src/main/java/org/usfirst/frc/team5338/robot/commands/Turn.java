@@ -5,6 +5,7 @@ import org.usfirst.frc.team5338.robot.Robot;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 //import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Turn extends PIDCommand
@@ -14,7 +15,7 @@ public class Turn extends PIDCommand
 	public Turn(double input)
 	{
 		//Input in inches to travel
-		super(0.05535, 0.0000083, 0);
+		super(0.05, 0.05, 0.565);
 		this.requires(Robot.drivetrain);
 		this.requires(Robot.sensors);
 
@@ -23,12 +24,10 @@ public class Turn extends PIDCommand
 		getPIDController().setOutputRange(-0.6, 0.6);
 		getPIDController().setInputRange(-180, 180);
 		getPIDController().setContinuous();
-		getPIDController().setP(0.05535);
-		getPIDController().setI(0.0000083);
 		getPIDController().setF(0.005);
 
 		//LiveWindow.add(getPIDController());
-		//SmartDashboard.putData(this);
+		SmartDashboard.putData(this);
 		this.initalHeading = Robot.sensors.ahrs.getYaw();
 		//SmartDashboard.putNumber("heading", this.initalHeading);
 		// this.targetHeading = ((double) (-Robot.sensors.ahrs.getYaw()) + angle);
@@ -46,7 +45,6 @@ public class Turn extends PIDCommand
 		//SmartDashboard.putNumber("setpoint", getPIDController().getSetpoint());
 		//SmartDashboard.putNumber("I", getPIDController().getI());
 		
-	
 		this.setTimeout(15);
 	}
 	
@@ -81,5 +79,6 @@ public class Turn extends PIDCommand
 	@Override
 	protected void usePIDOutput(double output) {
 		Robot.drivetrain.drive(-output, output);
+		SmartDashboard.putNumber("heading", -Robot.sensors.ahrs.getYaw());
 	}
 }

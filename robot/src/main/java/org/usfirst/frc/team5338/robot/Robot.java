@@ -4,6 +4,7 @@ package org.usfirst.frc.team5338.robot;
 
 //Import of necessary subsystem.
 import org.usfirst.frc.team5338.robot.commands.Autonomous;
+import org.usfirst.frc.team5338.robot.commands.Turn;
 import org.usfirst.frc.team5338.robot.subsystems.Claw;
 import org.usfirst.frc.team5338.robot.subsystems.Climber;
 import org.usfirst.frc.team5338.robot.subsystems.DriveTrain;
@@ -34,7 +35,16 @@ public class Robot extends IterativeRobot
 	public static SendableChooser<String> autonomousChooser = new SendableChooser<String>();
 	// Defines Command object for Auto
 	public static Command autonomous;
+	public static Turn testTurn;
 	
+	@Override
+	public void testInit() {
+	}
+
+	@Override
+	public void testPeriodic() {
+	}
+
 	// Public method that runs once on robot startup.
 	@Override
 	public void robotInit()

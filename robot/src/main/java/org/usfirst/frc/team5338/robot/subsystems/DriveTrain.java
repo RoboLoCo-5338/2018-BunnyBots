@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5338.robot.subsystems;
 
 import org.usfirst.frc.team5338.robot.OI;
+import org.usfirst.frc.team5338.robot.Robot;
 import org.usfirst.frc.team5338.robot.commands.JoystickControl;
 
 import com.ctre.phoenix.motorcontrol.ControlFrame;
@@ -37,6 +38,12 @@ public class DriveTrain extends Subsystem
 	private boolean straight;
 	private boolean sensChange = false;
 	private double speed = 3.0/5.5;;
+	private double maxLVelocity = 0.0;
+	private double maxRVelocity = 0.0;
+	private double accelRight = 0.0;
+	private double accelLeft = 0.0;
+	private double maxLAccel = 0.0;
+	private double maxRAccel = 0.0;
 	
 	// Use constructor for any pre-start initialization
 	public DriveTrain()
@@ -105,12 +112,48 @@ public class DriveTrain extends Subsystem
 		if(sensChange) {
 			speed = 0.25;
 		} else {
-			speed = 3.0/5.5;
+			speed = 1;
 		}
 
 		SmartDashboard.putBoolean("sens", !sensChange);
 
+		final double[] velocity = Robot.sensors.velocity();
 
+		final double[] prevVelocity = Robot.sensors.prevVelocity();
+
+		final double[] time = Robot.sensors.time();
+
+		accelLeft = (velocity[0] - prevVelocity[0])/(time[1] - time[0]);
+		accelRight = (velocity[1] - prevVelocity[1])/(time[1] - time[0]);
+
+		if(Math.abs(velocity[0]) > maxLVelocity) {
+			
+		 	maxLVelocity = Math.abs(velocity[0]);
+		}
+
+		 if(Math.abs(velocity[1]) > maxRVelocity) {
+		 	maxRVelocity = Math.abs(velocity[1]);
+		 }
+
+		 if(Math.abs(accelLeft) > maxLAccel) { 
+			 maxLAccel = Math.abs(accelLeft);
+		 }
+
+		 if(accelRight > maxRAccel) {
+			 maxRAccel = Math.abs(accelRight);
+		 }
+
+		 SmartDashboard.putNumber("MaxVel", 0.5 * (maxLVelocity + maxRVelocity));
+		 SmartDashboard.putNumber("Max Accel", 0.5 * (Math.abs(maxLAccel) + Math.abs(maxRAccel)));
+
+		// if(Robot.sensors.accel() > maxAccel) {
+		// 	maxAccel = Robot.sensors.accel();
+		// }
+
+
+		// SmartDashboard.putNumber("pos", 0.5 * (1.0/4096.0) * (6.0/Math.PI) * (Math.abs(this.getEncoders()[0].getQuadraturePosition()) + Math.abs(this.getEncoders()[1].getQuadraturePosition())));
+		// SmartDashboard.putNumber("leftPos", this.getEncoders()[0].getQuadraturePosition());
+		// SmartDashboard.putNumber("rightPos", this.getEncoders()[1].getQuadraturePosition());
 
 		// if(Robot.oi.get(OI.Button.SHIFT_UP))
 		// {
