@@ -44,11 +44,11 @@ public class OI
 			case OPEN:
 				return this.leftController.getRawButton(1);
 			case INTAKE:
-				return this.leftController.getRawButton(5);
+				return this.rightController.getRawButton(5);
 			case OUTTAKE:
-				return this.leftController.getRawButton(6);
+				return this.rightController.getRawButton(6);
 			case SPIN_UP:
-				return this.leftController.getRawAxis(2) > 0.1 ? true : false;
+				return this.rightController.getRawAxis(2) > 0.1 ? true : false;
 			case SHOOT:
 				return this.leftController.getRawAxis(3) > 0.1 ? true : false;
 			case EXTEND:
@@ -60,11 +60,11 @@ public class OI
 			case SHIFT_DOWN:
 				return this.rightController.getRawButton(8);
 			case FLOOR:
-				return this.leftController.getPOV(0) == 180 ? true : false;
+				return this.rightController.getPOV(0) == 180 ? true : false;
 			case SWITCH:
-				return this.leftController.getPOV(0) == 90 || this.leftController.getPOV(0) == 270 ? true : false;
+				return this.rightController.getPOV(0) == 90 || this.leftController.getPOV(0) == 270 ? true : false;
 			case SCALE:
-				return this.leftController.getPOV(0) == 0 ? true : false;
+				return this.rightController.getPOV(0) == 0 ? true : false;
 			case SENS:
 				return this.rightController.getRawButtonReleased(10);
 			default:

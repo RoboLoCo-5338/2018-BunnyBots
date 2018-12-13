@@ -21,7 +21,7 @@ public class DriveTrain extends Subsystem
 {
 	// Field variables that we will use
 	// Talons: motor controllers that we use on the robot
-	private final WPI_TalonSRX LEFT_1 = new WPI_TalonSRX(1);
+	public final WPI_TalonSRX LEFT_1 = new WPI_TalonSRX(1);
 	public final WPI_TalonSRX LEFT_2 = new WPI_TalonSRX(2);
 	public final WPI_TalonSRX RIGHT_1 = new WPI_TalonSRX(3);
 	public final WPI_TalonSRX RIGHT_2 = new WPI_TalonSRX(4);
@@ -112,7 +112,7 @@ public class DriveTrain extends Subsystem
 		if(sensChange) {
 			speed = 0.25;
 		} else {
-			speed = 1;
+			speed = 3.0/5.5;
 		}
 
 		SmartDashboard.putBoolean("sens", !sensChange);
