@@ -15,7 +15,7 @@ public class Sensors extends Subsystem
 {
 	private final SensorCollection[] ENCODERS = Robot.drivetrain.getEncoders();
 	public final AHRS ahrs = new AHRS(SPI.Port.kMXP, (byte) (200));
-	private double right_rotations, left_rotations, right_prev, right_vel, right_velPREV, right_current, left_prev, left_velPREV, left_current, left_vel, acc, time, timePrev;
+	private double right_rotations, left_rotations, right_prev, right_vel, right_current, left_prev, left_current, left_vel, acc;
 	private final PowerDistributionPanel PDP = new PowerDistributionPanel();
 	
 	public Sensors()
@@ -39,19 +39,18 @@ public class Sensors extends Subsystem
 		this.left_prev = 0;
 		this.right_current = 0;
 		this.left_current = 0;
-		this.time = System.currentTimeMillis();
 	}
 	private void updateEncoders()
 	{
-		this.timePrev = this.time;
-		this.time = System.currentTimeMillis();
+		//this.timePrev = this.time;
+		//this.time = System.currentTimeMillis();
 		this.right_prev = this.right_current;
-		this.left_velPREV = this.right_vel;
+		//this.left_velPREV = this.right_vel;
 		this.right_current = Math.abs(this.ENCODERS[0].getQuadraturePosition());
 		this.right_vel = Math.abs(this.ENCODERS[0].getQuadratureVelocity());
-		// this.acc = Math.abs(this.ahrs.getRawAccelX());
+		this.acc = Math.abs(this.ahrs.getWorldLinearAccelX());
 		this.left_prev = this.left_current;
-		this.left_velPREV = this.left_prev;
+		//this.left_velPREV = this.left_prev;
 		this.left_current = Math.abs(this.ENCODERS[1].getQuadraturePosition());
 		this.left_vel = Math.abs(this.ENCODERS[1].getQuadratureVelocity());
 	}
@@ -69,14 +68,9 @@ public class Sensors extends Subsystem
 		return new double[] {Math.abs(this.left_vel), Math.abs(this.right_vel)};
 	}
 
-	public double[] prevVelocity() {
+	public double acc() {
 		this.updateEncoders();
-		return new double[] {Math.abs(this.left_velPREV), Math.abs(this.right_velPREV)}; 
-	}
-
-	public double[] time() {
-		this.updateEncoders();
-		return new double[] {Math.abs(this.timePrev), Math.abs(this.time)}; 
+		return this.acc; 
 	}
 	
 	public void displayVoltage()

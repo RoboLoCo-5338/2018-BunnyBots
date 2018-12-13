@@ -40,9 +40,9 @@ public class DriveTrain extends Subsystem
 	private double speed = 3.0/5.5;;
 	private double maxLVelocity = 0.0;
 	private double maxRVelocity = 0.0;
-	private double accelRight = 0.0;
-	private double accelLeft = 0.0;
-	private double maxLAccel = 0.0;
+	//private double accelRight = 0.0;
+	private double accel = 0.0;
+	private double maxAccel = 0.0;
 	private double maxRAccel = 0.0;
 	
 	// Use constructor for any pre-start initialization
@@ -117,34 +117,36 @@ public class DriveTrain extends Subsystem
 
 		SmartDashboard.putBoolean("sens", !sensChange);
 
-		final double[] velocity = Robot.sensors.velocity();
+		// final double[] velocity = Robot.sensors.velocity();
 
-		final double[] prevVelocity = Robot.sensors.prevVelocity();
+		// // final double[] prevVelocity = Robot.sensors.prevVelocity();
 
-		final double[] time = Robot.sensors.time();
+		// // final double[] time = Robot.sensors.time();
 
-		accelLeft = (velocity[0] - prevVelocity[0])/(time[1] - time[0]);
-		accelRight = (velocity[1] - prevVelocity[1])/(time[1] - time[0]);
+		// accel = Robot.sensors.acc();
+		// // accelRight = (velocity[1] - prevVelocity[1])/(time[1] - time[0]);
 
-		if(Math.abs(velocity[0]) > maxLVelocity) {
+		// if(Math.abs(velocity[0]) > maxLVelocity) {
 			
-		 	maxLVelocity = Math.abs(velocity[0]);
-		}
+		//  	maxLVelocity = Math.abs(velocity[0]);
+		// }
 
-		 if(Math.abs(velocity[1]) > maxRVelocity) {
-		 	maxRVelocity = Math.abs(velocity[1]);
-		 }
+		//  if(Math.abs(velocity[1]) > maxRVelocity) {
+		//  	maxRVelocity = Math.abs(velocity[1]);
+		//  }
 
-		 if(Math.abs(accelLeft) > maxLAccel) { 
-			 maxLAccel = Math.abs(accelLeft);
-		 }
+		// SmartDashboard.putNumber("accel", accel);
 
-		 if(accelRight > maxRAccel) {
-			 maxRAccel = Math.abs(accelRight);
-		 }
+		// if(Math.abs(accel) > maxAccel) { 
+		//  	maxAccel = Math.abs(accel);
+		// }
 
-		 SmartDashboard.putNumber("MaxVel", 0.5 * (maxLVelocity + maxRVelocity));
-		 SmartDashboard.putNumber("Max Accel", 0.5 * (Math.abs(maxLAccel) + Math.abs(maxRAccel)));
+		// //  if(accelRight > maxRAccel) {
+		// // 	 maxRAccel = Math.abs(accelRight);
+		// //  }
+
+		//  SmartDashboard.putNumber("MaxVel", 0.5 * (maxLVelocity + maxRVelocity));
+		//  SmartDashboard.putNumber("Max Accel", maxAccel * 9.80665);
 
 		// if(Robot.sensors.accel() > maxAccel) {
 		// 	maxAccel = Robot.sensors.accel();
