@@ -38,12 +38,12 @@ public class DriveTrain extends Subsystem
 	private boolean straight;
 	private boolean sensChange = false;
 	private double speed = 3.0/5.5;;
-	private double maxLVelocity = 0.0;
-	private double maxRVelocity = 0.0;
+	//private double maxLVelocity = 0.0;
+	//private double maxRVelocity = 0.0;
 	//private double accelRight = 0.0;
-	private double accel = 0.0;
-	private double maxAccel = 0.0;
-	private double maxRAccel = 0.0;
+	// private double accel = 0.0;
+	// private double maxAccel = 0.0;
+	// private double maxRAccel = 0.0;
 	
 	// Use constructor for any pre-start initialization
 	public DriveTrain()
