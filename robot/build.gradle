@@ -33,6 +33,7 @@ dependencies {
     compile ctre()
     compile navx()
     compile openrio.powerup.matchData()
+    compile pathfinder()
 }
 
 // Builds the jar needed by the RoboRio to run our code.
