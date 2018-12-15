@@ -15,11 +15,6 @@ import jaci.pathfinder.modifiers.TankModifier;
 public class AutoPathfinder extends Command
 {
 
-    Waypoint[] points =  new Waypoint[] {
-        new Waypoint(0, 0, 0),
-        new Waypoint(10, 0, 0)
-    };
-
     Trajectory trajectory = null;
     TankModifier modifier = null;
     EncoderFollower left = null;
@@ -33,13 +28,24 @@ public class AutoPathfinder extends Command
         this.requires(Robot.drivetrain);
         this.requires(Robot.sensors);
 
-<<<<<<< HEAD
+        Waypoint[] points =  new Waypoint[] {
+            new Waypoint(0, 0, 0),
+            new Waypoint(10, 0, 0),
+        };
+
+
         Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 5.107479538, 3.530394, Double.POSITIVE_INFINITY);
-=======
-        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 5.107479538, 3.530394, Double.MAX_VALUE);
->>>>>>> de637e8e12e528fbdbfb86b223a7a59e54006a3f
         trajectory = Pathfinder.generate(points, config);
         modifier = new TankModifier(trajectory).modify(0.61);
+        
+
+        left = new EncoderFollower(modifier.getLeftTrajectory());
+        right = new EncoderFollower(modifier.getRightTrajectory());
+
+        left.configureEncoder(Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
+        right.configureEncoder(Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
+        left.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
+        right.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
 
         // myFile = new File("myfile.csv");
         // Pathfinder.writeToCSV(myFile, trajectory);
@@ -54,32 +60,29 @@ public class AutoPathfinder extends Command
 	@Override
 	protected void execute()
 	{
-       
-        left = new EncoderFollower(modifier.getLeftTrajectory());
-        right = new EncoderFollower(modifier.getRightTrajectory());
-        left.configureEncoder(Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
-        right.configureEncoder(Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
-        left.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
-        right.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
 
         leftEncoder = Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("left_encoder", leftEncoder);
         rightEncoder = Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("right endocer", rightEncoder);
         l = left.calculate(leftEncoder);
         r = right.calculate(rightEncoder);
         SmartDashboard.putNumber("left_calc", l);
         SmartDashboard.putNumber("right_calc", r);
-        gyroHeading = Robot.sensors.ahrs.getAngle();
+
+        gyroHeading = Robot.sensors.ahrs.getYaw();
         SmartDashboard.putNumber("heading", gyroHeading);
         desiredHeading = Pathfinder.r2d(left.getHeading());
         angleDifference = Pathfinder.boundHalfDegrees(desiredHeading - gyroHeading);
         turn = 0.8 * (-1.0/80.0) * angleDifference;
+
+        Robot.drivetrain.drive(l + turn, r - turn);
 
         // if(l - turn > 0.55) {
         //     l = 0.5(l);
         //     turn = 0.5(turn);
         // }
     
-        Robot.drivetrain.drive((l - turn), (r + turn));
     }
 	@Override
 	protected boolean isFinished()

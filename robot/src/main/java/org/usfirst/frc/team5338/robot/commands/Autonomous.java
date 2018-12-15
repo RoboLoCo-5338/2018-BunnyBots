@@ -23,6 +23,7 @@ public class Autonomous extends CommandGroup
 			switch(this.autonomous)
 			{
 				case "TESTING": // THIS IS TEMPORARY ONLY, PLEASE REMOVE ME!!
+					this.addSequential(new ResetSensors());
 					this.addSequential(new AutoPathfinder());
 					break;
 				case "NOTHING":
@@ -210,17 +211,17 @@ public class Autonomous extends CommandGroup
 					}
 					else
 					{
-						this.addSequential(new Straight(126.0));
+						this.addSequential(new AutoPathfinder());
 					}
 					break;
 				default:
-					this.addSequential(new Straight(27.0 * 12.0));
+					this.addSequential(new Straight(145.0));
 					break;
 			}
 		}
 		catch(final Exception e) // The FMS may screw up
 		{
-			this.addSequential(new Straight(126.0));
+			this.addSequential(new AutoPathfinder());
 		}
 	}
 }

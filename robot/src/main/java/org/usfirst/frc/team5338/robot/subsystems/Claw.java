@@ -20,13 +20,8 @@ public class Claw extends Subsystem
 	private final DoubleSolenoid SHOOTER = new DoubleSolenoid(8, 0, 7);
 	private double potValue; // potentiometer value
 	private final double SCALE_VALUE = 67.5; // potentiometer value when the dart actuator is retracted
-<<<<<<< HEAD
-	private final double FLOOR_VALUE = 773; // potentiometer value when dart actuator is extended
-	private final double SWITCH_VALUE = 290;
-=======
 	private final double SWITCH_VALUE = 560;
-	private final double FLOOR_VALUE = 775; // potentiometer value when dart actuator is extended
->>>>>>> de637e8e12e528fbdbfb86b223a7a59e54006a3f
+	private final double FLOOR_VALUE = 773; // potentiometer value when dart actuator is extended
 	private boolean clawClosed = true;
 	private boolean clawTemp;
 	private boolean shooterPosition = false;
