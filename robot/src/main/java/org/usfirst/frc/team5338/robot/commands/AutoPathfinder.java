@@ -30,7 +30,7 @@ public class AutoPathfinder extends Command
         this.requires(Robot.drivetrain);
         this.requires(Robot.sensors);
 
-        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.5, 5.107479538, 3.530394, Double.MAX_VALUE);
+        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 5.107479538, 3.530394, Double.MAX_VALUE);
         trajectory = Pathfinder.generate(points, config);
         modifier = new TankModifier(trajectory).modify(0.61);
         left = new EncoderFollower(modifier.getLeftTrajectory());
