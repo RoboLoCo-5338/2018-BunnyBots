@@ -17,28 +17,28 @@ public class AutoPathfinder extends Command
 
     Waypoint[] points =  new Waypoint[] {
         new Waypoint(0, 0, 0),
-        new Waypoint(-2, -2, Pathfinder.d2r(-45))
+        new Waypoint(10, 0, 0)
     };
 
     Trajectory trajectory = null;
     TankModifier modifier = null;
     EncoderFollower left = null;
     EncoderFollower right = null;
+    // File myFile = null;
+    int leftEncoder, rightEncoder;
+    double gyroHeading, l, r, desiredHeading, angleDifference, turn;
 
 	public AutoPathfinder()
 	{
         this.requires(Robot.drivetrain);
         this.requires(Robot.sensors);
 
-        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.5, 5.107479538, 3.530394, Double.MAX_VALUE);
+        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 5.107479538, 3.530394, Double.POSITIVE_INFINITY);
         trajectory = Pathfinder.generate(points, config);
         modifier = new TankModifier(trajectory).modify(0.61);
-        left = new EncoderFollower(modifier.getLeftTrajectory());
-        right = new EncoderFollower(modifier.getRightTrajectory());
-        left.configureEncoder(Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
-        right.configureEncoder(Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
-        left.configurePIDVA(1.00, 0.00, 0.00, 1.0 / 5.107479538, 0);
-        right.configurePIDVA(1.00, 0.00, 0.00, 1.0 / 5.107479538, 0);
+
+        // myFile = new File("myfile.csv");
+        // Pathfinder.writeToCSV(myFile, trajectory);
 
         this.setTimeout(1000);
     }
@@ -50,34 +50,32 @@ public class AutoPathfinder extends Command
 	@Override
 	protected void execute()
 	{
-        modifier = new TankModifier(trajectory).modify(0.61);
+       
         left = new EncoderFollower(modifier.getLeftTrajectory());
         right = new EncoderFollower(modifier.getRightTrajectory());
         left.configureEncoder(Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
         right.configureEncoder(Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
-        left.configurePIDVA(100.00, 0.00, 0.00, 1.0 / 5.107479538, 0);
-        right.configurePIDVA(100.00, 0.00, 0.00, 1.0 / 5.107479538, 0);
+        left.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
+        right.configurePIDVA(1.2, 0.00, 0.00, 1.0 / 5.107479538, 0);
 
-        int leftEncoder = Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition());
-        int rightEncoder = Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition());
-        double l = left.calculate(leftEncoder);
-        double r = right.calculate(rightEncoder);
-        double gyroHeading = Robot.sensors.ahrs.getAngle();
-        double desiredHeading = Pathfinder.r2d(left.getHeading());
-        double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading - gyroHeading);
-        double turn = 0.8 * (-1.0/80.0) * angleDifference;
-        SmartDashboard.putNumber("Right Profile", (r + turn));
-        SmartDashboard.putNumber("Left Profile", (l - turn));
-        SmartDashboard.putNumber("encoder Left ", leftEncoder);
-        SmartDashboard.putNumber("encoder Right", rightEncoder);
-        SmartDashboard.putNumber("Turn", turn);
-        SmartDashboard.putNumber("Desired Heading", desiredHeading);
-        SmartDashboard.putNumber("Left Drive", -(r + turn));
-        SmartDashboard.putNumber("Right Drive", -(l - turn));
+        leftEncoder = Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition());
+        rightEncoder = Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition());
+        l = left.calculate(leftEncoder);
+        r = right.calculate(rightEncoder);
+        SmartDashboard.putNumber("left_calc", l);
+        SmartDashboard.putNumber("right_calc", r);
+        gyroHeading = Robot.sensors.ahrs.getAngle();
+        SmartDashboard.putNumber("heading", gyroHeading);
+        desiredHeading = Pathfinder.r2d(left.getHeading());
+        angleDifference = Pathfinder.boundHalfDegrees(desiredHeading - gyroHeading);
+        turn = 0.8 * (-1.0/80.0) * angleDifference;
 
-        // SmartDashboard.putNumber("turn", turn);
+        // if(l - turn > 0.55) {
+        //     l = 0.5(l);
+        //     turn = 0.5(turn);
+        // }
     
-        Robot.drivetrain.drive(l - turn, r + turn);
+        Robot.drivetrain.drive((l - turn), (r + turn));
     }
 	@Override
 	protected boolean isFinished()
