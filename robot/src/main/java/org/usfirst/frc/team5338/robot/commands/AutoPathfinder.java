@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5338.robot.commands;
 
+import java.io.File;
+
 import org.usfirst.frc.team5338.robot.Robot;
 import org.usfirst.frc.team5338.robot.subsystems.DriveTrain;
 
@@ -21,6 +23,8 @@ public class AutoPathfinder extends Command
     EncoderFollower right = null;
     // File myFile = null;
     int leftEncoder, rightEncoder;
+    File myFileLeft = new File("move_forward_left_Jaci.csv");
+    File myFileRight = new File("move_forward_right_Jaci.csv");
     double gyroHeading, l, r, desiredHeading, angleDifference, turn;
 
 	public AutoPathfinder()
@@ -28,19 +32,15 @@ public class AutoPathfinder extends Command
         this.requires(Robot.drivetrain);
         this.requires(Robot.sensors);
 
-        Waypoint[] points =  new Waypoint[] {
-            new Waypoint(0, 0, 0),
-            new Waypoint(10, 0, 0),
-        };
+        
+        Trajectory leftTrajectory = Pathfinder.readFromCSV(myFileLeft);
 
-
-        Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 5.107479538, 3.530394, Double.POSITIVE_INFINITY);
-        trajectory = Pathfinder.generate(points, config);
-        modifier = new TankModifier(trajectory).modify(0.61);
+        
+        Trajectory rightTrajectory = Pathfinder.readFromCSV(myFileRight);
         
 
-        left = new EncoderFollower(modifier.getLeftTrajectory());
-        right = new EncoderFollower(modifier.getRightTrajectory());
+        left = new EncoderFollower(leftTrajectory);
+        right = new EncoderFollower(rightTrajectory);
 
         left.configureEncoder(Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
         right.configureEncoder(Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition()), 4096, 0.15);
@@ -61,9 +61,9 @@ public class AutoPathfinder extends Command
 	protected void execute()
 	{
 
-        leftEncoder = Math.abs(Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition());
+        leftEncoder = Robot.drivetrain.LEFT_1.getSensorCollection().getQuadraturePosition();
         SmartDashboard.putNumber("left_encoder", leftEncoder);
-        rightEncoder = Math.abs(Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition());
+        rightEncoder = Robot.drivetrain.RIGHT_2.getSensorCollection().getQuadraturePosition();
         SmartDashboard.putNumber("right endocer", rightEncoder);
         l = left.calculate(leftEncoder);
         r = right.calculate(rightEncoder);

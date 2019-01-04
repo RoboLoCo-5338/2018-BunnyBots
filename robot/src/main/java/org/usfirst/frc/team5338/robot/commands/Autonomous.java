@@ -215,7 +215,7 @@ public class Autonomous extends CommandGroup
 					}
 					break;
 				default:
-					this.addSequential(new Straight(145.0));
+					this.addSequential(new Straight(27.0 * 12.0));
 					break;
 			}
 		}
