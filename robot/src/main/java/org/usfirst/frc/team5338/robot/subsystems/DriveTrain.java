@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5338.robot.subsystems;
 
 import org.usfirst.frc.team5338.robot.OI;
+import org.usfirst.frc.team5338.robot.Robot;
 import org.usfirst.frc.team5338.robot.commands.JoystickControl;
 
 import com.ctre.phoenix.motorcontrol.ControlFrame;
@@ -20,7 +21,7 @@ public class DriveTrain extends Subsystem
 {
 	// Field variables that we will use
 	// Talons: motor controllers that we use on the robot
-	private final WPI_TalonSRX LEFT_1 = new WPI_TalonSRX(1);
+	public final WPI_TalonSRX LEFT_1 = new WPI_TalonSRX(1);
 	public final WPI_TalonSRX LEFT_2 = new WPI_TalonSRX(2);
 	public final WPI_TalonSRX RIGHT_1 = new WPI_TalonSRX(3);
 	public final WPI_TalonSRX RIGHT_2 = new WPI_TalonSRX(4);
@@ -37,6 +38,12 @@ public class DriveTrain extends Subsystem
 	private boolean straight;
 	private boolean sensChange = false;
 	private double speed = 3.0/5.5;;
+	//private double maxLVelocity = 0.0;
+	//private double maxRVelocity = 0.0;
+	//private double accelRight = 0.0;
+	// private double accel = 0.0;
+	// private double maxAccel = 0.0;
+	// private double maxRAccel = 0.0;
 	
 	// Use constructor for any pre-start initialization
 	public DriveTrain()
@@ -110,7 +117,45 @@ public class DriveTrain extends Subsystem
 
 		SmartDashboard.putBoolean("sens", !sensChange);
 
+		// final double[] velocity = Robot.sensors.velocity();
 
+		// // final double[] prevVelocity = Robot.sensors.prevVelocity();
+
+		// // final double[] time = Robot.sensors.time();
+
+		// accel = Robot.sensors.acc();
+		// // accelRight = (velocity[1] - prevVelocity[1])/(time[1] - time[0]);
+
+		// if(Math.abs(velocity[0]) > maxLVelocity) {
+			
+		//  	maxLVelocity = Math.abs(velocity[0]);
+		// }
+
+		//  if(Math.abs(velocity[1]) > maxRVelocity) {
+		//  	maxRVelocity = Math.abs(velocity[1]);
+		//  }
+
+		// SmartDashboard.putNumber("accel", accel);
+
+		// if(Math.abs(accel) > maxAccel) { 
+		//  	maxAccel = Math.abs(accel);
+		// }
+
+		// //  if(accelRight > maxRAccel) {
+		// // 	 maxRAccel = Math.abs(accelRight);
+		// //  }
+
+		//  SmartDashboard.putNumber("MaxVel", 0.5 * (maxLVelocity + maxRVelocity));
+		//  SmartDashboard.putNumber("Max Accel", maxAccel * 9.80665);
+
+		// if(Robot.sensors.accel() > maxAccel) {
+		// 	maxAccel = Robot.sensors.accel();
+		// }
+
+
+		// SmartDashboard.putNumber("pos", 0.5 * (1.0/4096.0) * (6.0/Math.PI) * (Math.abs(this.getEncoders()[0].getQuadraturePosition()) + Math.abs(this.getEncoders()[1].getQuadraturePosition())));
+		// SmartDashboard.putNumber("leftPos", this.getEncoders()[0].getQuadraturePosition());
+		// SmartDashboard.putNumber("rightPos", this.getEncoders()[1].getQuadraturePosition());
 
 		// if(Robot.oi.get(OI.Button.SHIFT_UP))
 		// {
